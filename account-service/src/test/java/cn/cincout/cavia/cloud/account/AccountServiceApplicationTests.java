@@ -1,4 +1,4 @@
-package cn.cincout.cavia.cloud.accout;
+package cn.cincout.cavia.cloud.account;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
