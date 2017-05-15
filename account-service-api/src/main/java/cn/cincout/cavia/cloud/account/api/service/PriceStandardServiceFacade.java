@@ -1,6 +1,6 @@
-package cn.cincout.cavia.cloud.api.account.service;
+package cn.cincout.cavia.cloud.account.api.service;
 
-import cn.cincout.cavia.cloud.api.account.dto.price.PriceStandardDto;
+import cn.cincout.cavia.cloud.account.api.dto.price.PriceStandardDto;
 
 import java.util.Collection;
 

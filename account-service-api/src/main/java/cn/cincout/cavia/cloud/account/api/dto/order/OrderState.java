@@ -1,4 +1,4 @@
-package cn.cincout.cavia.cloud.api.account.dto.order;
+package cn.cincout.cavia.cloud.account.api.dto.order;
 
 /**
  * Created by zhaoyu on 16-9-14.

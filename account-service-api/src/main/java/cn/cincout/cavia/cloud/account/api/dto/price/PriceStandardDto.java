@@ -1,4 +1,4 @@
-package cn.cincout.cavia.cloud.api.account.dto.price;
+package cn.cincout.cavia.cloud.account.api.dto.price;
 
 import lombok.*;
 

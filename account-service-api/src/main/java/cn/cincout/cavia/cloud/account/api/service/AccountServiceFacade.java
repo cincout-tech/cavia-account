@@ -1,6 +1,6 @@
-package cn.cincout.cavia.cloud.api.account.service;
+package cn.cincout.cavia.cloud.account.api.service;
 
-import cn.cincout.cavia.cloud.api.account.dto.account.AccountDto;
+import cn.cincout.cavia.cloud.account.api.dto.account.AccountDto;
 
 import java.util.List;
 
