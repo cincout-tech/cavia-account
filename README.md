@@ -1,1 +1,1 @@
-# accout project for cavia cloud.
+# account project for cavia cloud.

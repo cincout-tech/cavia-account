@@ -27,4 +27,8 @@ public interface ResourceServiceFacade {
     Pagination<ResourceDto> findByTag(Long accountId, String tag);
 
     void delete(Long resourceId);
+
+    ResourceDto like(Long accountId, Long resourceId);
+    ResourceDto view(Long accountId, Long resourceId);
+    ResourceDto view(Long resourceId);
 }

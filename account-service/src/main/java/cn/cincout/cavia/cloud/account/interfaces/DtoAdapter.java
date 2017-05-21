@@ -3,9 +3,11 @@ package cn.cincout.cavia.cloud.account.interfaces;
 import cn.cincout.cavia.cloud.account.api.dto.account.AccountDto;
 import cn.cincout.cavia.cloud.account.api.dto.order.OrderDetailDto;
 import cn.cincout.cavia.cloud.account.api.dto.price.PriceStandardDto;
+import cn.cincout.cavia.cloud.account.api.dto.resource.ResourceDto;
 import cn.cincout.cavia.cloud.account.domain.account.Account;
 import cn.cincout.cavia.cloud.account.domain.order.OrderDetail;
 import cn.cincout.cavia.cloud.account.domain.price.PriceStandard;
+import cn.cincout.cavia.cloud.account.domain.resource.Resource;
 import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
@@ -26,13 +28,9 @@ public abstract class DtoAdapter {
         if (account == null) {
             return null;
         }
-        return new AccountDto(
-                account.getId(),
-                account.getName(),
-                account.getEmail(),
-                account.getPhoneNumber(),
-                account.isEnable()
-        );
+        AccountDto accountDto = new AccountDto();
+        BeanUtils.copyProperties(account, accountDto);
+        return accountDto;
     }
 
     public static Account toDomain(AccountDto dto) {
@@ -114,5 +112,42 @@ public abstract class DtoAdapter {
         Collection<PriceStandard> priceStandards = new ArrayList<>();
         collections.stream().forEach(priceStandardDto -> priceStandards.add(toDomain(priceStandardDto)));
         return priceStandards;
+    }
+
+    // resource
+    public static Resource toDomain(ResourceDto dto) {
+        if (dto == null) {
+            return null;
+        }
+        Resource resource = new Resource();
+        BeanUtils.copyProperties(dto, resource);
+        return resource;
+    }
+
+    public static ResourceDto toDto(Resource resource) {
+        if (resource == null) {
+            return null;
+        }
+        ResourceDto resourceDto = new ResourceDto();
+        BeanUtils.copyProperties(resource, resourceDto);
+        return resourceDto;
+    }
+
+    public static List<Resource> toResourceList(List<ResourceDto> resourceDtoList) {
+        if (resourceDtoList == null) {
+            return null;
+        }
+        List<Resource> resources = new ArrayList<>();
+        resourceDtoList.stream().forEach(resourceDto -> resources.add(toDomain(resourceDto)));
+        return resources;
+    }
+
+    public static List<ResourceDto> toResourceDtoList(List<Resource> resources) {
+        if (resources == null) {
+            return null;
+        }
+        List<ResourceDto> resourceDtoList = new ArrayList<>();
+        resources.stream().forEach(resource -> resourceDtoList.add(toDto(resource)));
+        return resourceDtoList;
     }
 }

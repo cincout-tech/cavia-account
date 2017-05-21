@@ -18,7 +18,7 @@ import java.util.List;
  * @date 17-4-12
  * @sine 1.8
  */
-@Service(version = "1.0")
+//@Service(version = "1.0")
 public class OrderServiceFacadeImpl implements OrderServiceFacade {
     private static final Logger LOG = LoggerFactory.getLogger(OrderServiceFacadeImpl.class);
 

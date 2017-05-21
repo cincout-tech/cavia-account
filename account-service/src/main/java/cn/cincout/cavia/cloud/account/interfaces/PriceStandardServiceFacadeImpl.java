@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Created by zhaoyu on 16-9-14.
@@ -18,7 +17,7 @@ import java.util.List;
  * @date 17-4-12
  * @sine 1.8
  */
-@Service(version = "1.0")
+//@Service(version = "1.0")
 public class PriceStandardServiceFacadeImpl implements PriceStandardServiceFacade {
     private final static Logger LOG = LoggerFactory.getLogger(PriceStandardServiceFacadeImpl.class);
 

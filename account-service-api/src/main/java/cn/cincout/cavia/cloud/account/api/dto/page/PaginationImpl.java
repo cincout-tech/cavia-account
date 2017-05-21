@@ -1,5 +1,9 @@
 package cn.cincout.cavia.cloud.account.api.dto.page;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -9,8 +13,8 @@ import java.util.List;
  * @date 17-5-15
  * @sine 1.8
  */
-public class PaginationImpl<T> extends Chunk<T> implements Pagination<T> {
-
+public class PaginationImpl<T> implements Pagination<T>, Slice<T>, Serializable {
+    private List<T> content = new ArrayList<T>();
     private long total;
     private PageInfo pageInfo;
 
@@ -27,9 +31,8 @@ public class PaginationImpl<T> extends Chunk<T> implements Pagination<T> {
      */
     public PaginationImpl(List<T> content, PageInfo pageInfo, long total) {
 
-        super(content, pageInfo);
-
         this.pageInfo = pageInfo;
+        this.content.addAll(content);
         this.total = !content.isEmpty() && pageInfo != null && pageInfo.getOffset() + pageInfo.getPageSize() > total
                 ? pageInfo.getOffset() + content.size() : total;
     }
@@ -71,14 +74,119 @@ public class PaginationImpl<T> extends Chunk<T> implements Pagination<T> {
         return getNumber() + 1 < getTotalPages();
     }
 
+    public void setContent(List<T> content) {
+        this.content = content;
+    }
+
+    public void setPageInfo(PageInfo pageInfo) {
+        this.pageInfo = pageInfo;
+    }
+
+    /*
+         * (non-Javadoc)
+         * @see org.springframework.data.domain.Slice#getNumber()
+         */
+    public int getNumber() {
+        return pageInfo == null ? 0 : pageInfo.getPageNumber();
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.springframework.data.domain.Slice#getSize()
+     */
+    public int getSize() {
+        return pageInfo == null ? 0 : pageInfo.getPageSize();
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.springframework.data.domain.Slice#getNumberOfElements()
+     */
+    public int getNumberOfElements() {
+        return content.size();
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.springframework.data.domain.Slice#hasPrevious()
+     */
+    public boolean hasPrevious() {
+        return getNumber() > 0;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.springframework.data.domain.Slice#isFirst()
+     */
+    public boolean isFirst() {
+        return !hasPrevious();
+    }
+
     /*
      * (non-Javadoc)
      * @see org.springframework.data.domain.Slice#isLast()
      */
-    @Override
     public boolean isLast() {
         return !hasNext();
     }
+
+    /*
+     * (non-Javadoc)
+     * @see org.springframework.data.domain.Slice#nextPageable()
+     */
+    public PageInfo nextPageable() {
+        return hasNext() ? pageInfo.next() : null;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.springframework.data.domain.Slice#previousPageable()
+     */
+    public PageInfo previousPageable() {
+
+        if (hasPrevious()) {
+            return pageInfo.previousOrFirst();
+        }
+
+        return null;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.springframework.data.domain.Slice#hasContent()
+     */
+    public boolean hasContent() {
+        return !content.isEmpty();
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.springframework.data.domain.Slice#getContent()
+     */
+    public List<T> getContent() {
+        return Collections.unmodifiableList(content);
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.springframework.data.domain.Slice#getSort()
+     */
+    public Sorts getSort() {
+        return pageInfo == null ? null : pageInfo.getSort();
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Iterable#iterator()
+     */
+    public Iterator<T> iterator() {
+        return content.iterator();
+    }
+
+    public PageInfo getPageInfo() {
+        return pageInfo;
+    }
+
 
     /*
      * (non-Javadoc)
