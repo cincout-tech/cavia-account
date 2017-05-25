@@ -68,4 +68,9 @@ public class AccountServiceImpl implements AccountService {
         account.setEnable(Boolean.FALSE);
         return account;
     }
+
+    @Override
+    public long totalAccounts() {
+        return accountRepository.count();
+    }
 }

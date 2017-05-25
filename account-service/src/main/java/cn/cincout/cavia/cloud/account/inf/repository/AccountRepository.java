@@ -17,6 +17,8 @@ import java.util.List;
 public interface AccountRepository extends JpaRepository<Account, Long> {
     @Query(value = "select account from Account account where account.name = ?1")
     Account findByName(String name);
+
+    @Query(value = "select account from Account account where account.email = ?1")
     Account findByEmail(String email);
 
     @Query(value = "select account from Account account where account.phoneNumber = ?1")

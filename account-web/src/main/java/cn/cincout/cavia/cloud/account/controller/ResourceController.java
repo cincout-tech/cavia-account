@@ -47,9 +47,6 @@ public class ResourceController {
                 new Sorts(new Sorts.OrderBy(order.toUpperCase().equals("ASC") ? Sorts.Direction.ASC: Sorts.Direction.DESC, sort))
         );
         Pagination<ResourceDto> pagination = resourceServiceFacade.findByKeyWordsLike(keywords, pageable);
-        System.out.println(pagination.getSize());
-        System.out.println(pagination.getSort());
-        System.out.println(pagination.getNumber());
         return pagination;
     }
 
@@ -70,6 +67,7 @@ public class ResourceController {
     @RequestMapping(value = "/resources/{resourceId}/view")
     public ResourceDto view(
             @PathVariable(name = "resourceId") long resourceId) {
+        LOG.debug("view resource id {}.", resourceId);
         return resourceServiceFacade.view(resourceId);
     }
 }

@@ -161,4 +161,19 @@ public class ResourceServiceImpl implements ResourceService {
         resource.setView(resource.getView() + 1);
         return resource;
     }
+
+    @Override
+    public long totalResources() {
+        return resourceRepository.count();
+    }
+
+    @Override
+    public long totalViews() {
+        return resourceViewRepository.count();
+    }
+
+    @Override
+    public long totalLikes() {
+        return resourceLikeRepository.count();
+    }
 }

@@ -106,6 +106,7 @@ public class ResourceServiceFacadeImpl implements ResourceServiceFacade {
 
     @Override
     public ResourceDto view(Long resourceId) {
-        return null;
+        Resource resource = resourceService.view(resourceId);
+        return DtoAdapter.toDto(resource);
     }
 }

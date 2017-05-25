@@ -20,4 +20,6 @@ public interface AccountService {
 
     Account save(Account account);
     Account delete(long id);
+
+    long totalAccounts();
 }

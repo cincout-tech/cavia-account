@@ -37,4 +37,8 @@ public interface ResourceService {
     Resource like(Long accountId, Long resourceId);
     Resource view(Long accountId, Long resourceId);
     Resource view(Long resourceId);
+
+    long totalResources();
+    long totalViews();
+    long totalLikes();
 }

@@ -25,7 +25,7 @@ public class HttpMessage<D> {
     @ToString
     public static class Msg {
         private int code;
-        private String error;
+        private String info;
     }
 }
 

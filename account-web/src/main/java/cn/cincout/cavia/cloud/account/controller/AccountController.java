@@ -7,10 +7,13 @@ import cn.cincout.cavia.cloud.account.vo.HttpMessage;
 import cn.cincout.cavia.cloud.account.vo.VoAdapter;
 import com.alibaba.dubbo.config.annotation.Reference;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -53,7 +56,7 @@ public class AccountController {
             );
         } else {
             return new HttpMessage<>(
-                    HttpStatus.OK,
+                    HttpStatus.BAD_REQUEST,
                     null,
                     new HttpMessage.Msg(1000, "password error.")
             );
@@ -62,40 +65,49 @@ public class AccountController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
-    public HttpMessage<AccountDto> register(@RequestBody AccountVo accountVo) {
+    public ResponseEntity<AccountDto> register(@RequestBody AccountVo accountVo) {
         LOG.debug("register user {}.", accountVo.getEmail());
-        AccountDto accountDto = accountServiceFacade.getByEmail(accountVo.getEmail());
-        if (accountDto != null) {
-            return new HttpMessage<>(
-                    HttpStatus.CONFLICT,
-                    null,
-                    new HttpMessage.Msg(1010, "email conflict.")
-            );
+        AccountDto accountDto = VoAdapter.toDto(accountVo);
+        accountDto = accountServiceFacade.save(accountDto);
+        return new ResponseEntity<>(accountDto, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/accounts", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<AccountDto> search(@RequestParam(name = "userName", required = false) String userName,
+                                             @RequestParam(name = "phoneNumber", required = false) String phoneNumber,
+                                             @RequestParam(name = "email", required = false) String email) {
+        AccountDto accountDto = null;
+        if (StringUtils.isNotBlank(userName)) {
+            accountDto = accountServiceFacade.getByName(userName);
+            if (accountDto != null) {
+                return new ResponseEntity<>(accountDto, HttpStatus.CONFLICT);
+            }
+            else {
+                return new ResponseEntity<>(accountDto, HttpStatus.NOT_FOUND);
+            }
         }
-        accountDto = accountServiceFacade.getByName(accountDto.getName());
-        if (accountDto != null) {
-            return new HttpMessage<>(
-                    HttpStatus.CONFLICT,
-                    null,
-                    new HttpMessage.Msg(1010, "name conflict.")
-            );
+        else if (StringUtils.isNotBlank(phoneNumber)) {
+            accountDto = accountServiceFacade.getByPhoneNumber(phoneNumber);
+            if (accountDto != null) {
+                return new ResponseEntity<>(accountDto, HttpStatus.CONFLICT);
+            }
+            else {
+                return new ResponseEntity<>(accountDto, HttpStatus.NOT_FOUND);
+            }
         }
 
-        accountDto = accountServiceFacade.getByPhoneNumber(accountVo.getPhoneNumber());
-        if (accountDto != null) {
-            return new HttpMessage<>(
-                    HttpStatus.CONFLICT,
-                    null,
-                    new HttpMessage.Msg(1010, "phoneNumber conflict.")
-            );
+        else if (StringUtils.isNotBlank(email)) {
+            accountDto = accountServiceFacade.getByEmail(email);
+            if (accountDto != null) {
+                return new ResponseEntity<>(accountDto, HttpStatus.CONFLICT);
+            }
+            else {
+                return new ResponseEntity<>(accountDto, HttpStatus.NOT_FOUND);
+            }
         }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        accountDto = VoAdapter.toDto(accountVo);
-        return new HttpMessage<>(
-                HttpStatus.OK,
-                accountServiceFacade.save(accountDto),
-                new HttpMessage.Msg(1000, "register success.")
-        );
     }
 }
 

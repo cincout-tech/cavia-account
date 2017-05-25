@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 /**
  * Created by zhaoyu on 16-9-14.
  *
@@ -27,4 +29,7 @@ public interface ResourceRepository extends JpaRepository<Resource, Long> {
 
     @Query(value = "select resource from Resource resource where resource.tags like %:tags% ")
     Page<Resource> findByTags(@Param("tags") String tags, Pageable pageable);
+
+    @Query(value = "select resource.categories from Resource resource")
+    List<String> findAllCategories();
 }
